@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Quest - Unicorn Adventure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="title-screen">
+            <h1>Fantasy Quest</h1>
+            <h2>Unicorn Adventure</h2>
+            <div class="characters-preview">
+                <div class="char-preview">
+                    <canvas id="preview-unicorn" width="80" height="80"></canvas>
+                    <p>Sparkle the Unicorn</p>
+                </div>
+                <div class="char-preview">
+                    <canvas id="preview-princess" width="80" height="80"></canvas>
+                    <p>Princess Aurora</p>
+                </div>
+                <div class="char-preview">
+                    <canvas id="preview-mushroom" width="80" height="80"></canvas>
+                    <p>Todrick the Mushroom</p>
+                </div>
+            </div>
+            <p class="story-text">
+                In a world full of fantasy, Sparkle the Unicorn, Princess Aurora in her magical car,
+                and Todrick the Mushroom embark on magical missions to save their enchanted kingdom!
+            </p>
+            <button id="start-btn" onclick="startGame()">Start Adventure</button>
+            <div class="controls-info">
+                <p><strong>Controls:</strong></p>
+                <p>SPACE / UP - Jump | LEFT/RIGHT - Move | DOWN - Duck</p>
+                <p>SHIFT - Switch Character | P - Pause</p>
+            </div>
+        </div>
+
+        <canvas id="game-canvas" width="900" height="500" style="display:none;"></canvas>
+
+        <div id="hud" style="display:none;">
+            <div id="hud-left">
+                <div id="active-char">Active: Sparkle</div>
+                <div id="health-bar">
+                    <div id="health-fill"></div>
+                </div>
+                <div id="health-text">HP: 100/100</div>
+            </div>
+            <div id="hud-center">
+                <div id="mission-text">Mission 1: Cross the Enchanted Forest</div>
+            </div>
+            <div id="hud-right">
+                <div id="score-display">Score: 0</div>
+                <div id="coins-display">Coins: 0</div>
+                <div id="distance-display">Distance: 0m</div>
+            </div>
+        </div>
+
+        <div id="game-over" style="display:none;">
+            <h2>Game Over</h2>
+            <p id="final-score"></p>
+            <p id="final-distance"></p>
+            <button onclick="restartGame()">Try Again</button>
+            <button onclick="goToTitle()">Main Menu</button>
+        </div>
+
+        <div id="mission-complete" style="display:none;">
+            <h2>Mission Complete!</h2>
+            <p id="mission-result"></p>
+            <button onclick="nextMission()">Next Mission</button>
+        </div>
+
+        <div id="victory-screen" style="display:none;">
+            <h2>Victory!</h2>
+            <p>You saved the Enchanted Kingdom!</p>
+            <p id="victory-score"></p>
+            <button onclick="goToTitle()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
