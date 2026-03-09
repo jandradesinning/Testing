@@ -1,0 +1,211 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1a0a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    width: 900px;
+    background: #0d0d1a;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.4), 0 0 80px rgba(138, 43, 226, 0.1);
+    overflow: hidden;
+}
+
+#title-screen {
+    text-align: center;
+    padding: 40px 30px;
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1b69 50%, #1a0a2e 100%);
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#title-screen h1 {
+    font-size: 48px;
+    color: #f0c0ff;
+    text-shadow: 0 0 20px #a855f7, 0 0 40px #7c3aed;
+    margin-bottom: 5px;
+    letter-spacing: 3px;
+}
+
+#title-screen h2 {
+    font-size: 24px;
+    color: #c084fc;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+.characters-preview {
+    display: flex;
+    gap: 30px;
+    margin: 15px 0;
+    justify-content: center;
+}
+
+.char-preview {
+    text-align: center;
+}
+
+.char-preview canvas {
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(168, 85, 247, 0.4);
+}
+
+.char-preview p {
+    color: #d8b4fe;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.story-text {
+    color: #a78bfa;
+    font-size: 14px;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 15px 0;
+    font-style: italic;
+}
+
+button {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 8px;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #6d28d9, #9333ea);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+}
+
+.controls-info {
+    color: #7c7c9e;
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+.controls-info p {
+    margin: 3px 0;
+}
+
+#game-canvas {
+    display: block;
+    background: #111;
+}
+
+#hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    background: linear-gradient(180deg, #1a0a2e, #0d0d1a);
+    border-top: 2px solid #7c3aed;
+    color: #d8b4fe;
+    font-size: 14px;
+}
+
+#hud-left, #hud-right {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#hud-center {
+    text-align: center;
+}
+
+#health-bar {
+    width: 150px;
+    height: 12px;
+    background: #2d1b3e;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #4c1d95;
+}
+
+#health-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    transition: width 0.3s ease;
+    border-radius: 6px;
+}
+
+#active-char {
+    color: #f0c0ff;
+    font-weight: bold;
+}
+
+#mission-text {
+    color: #fbbf24;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#score-display {
+    color: #f0c0ff;
+    font-weight: bold;
+}
+
+#game-over, #mission-complete, #victory-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 13, 26, 0.92);
+    z-index: 10;
+}
+
+#game-over h2 {
+    font-size: 48px;
+    color: #ef4444;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    margin-bottom: 15px;
+}
+
+#mission-complete h2 {
+    font-size: 42px;
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    margin-bottom: 15px;
+}
+
+#victory-screen h2 {
+    font-size: 48px;
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+    margin-bottom: 15px;
+}
+
+#game-over p, #mission-complete p, #victory-screen p {
+    color: #d8b4fe;
+    font-size: 18px;
+    margin: 5px 0;
+}
