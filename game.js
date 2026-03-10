@@ -89,6 +89,112 @@ for (let i = 0; i < 60; i++) {
     bgStars.push({ x: Math.random() * 900, y: Math.random() * 300, size: Math.random() * 2 + 0.5, speed: Math.random() * 0.3 + 0.1 });
 }
 
+// ---- Moon Phase ----
+let moonPhase = 0; // 0-7: new, waxing crescent, first quarter, waxing gibbous, full, waning gibbous, last quarter, waning crescent
+let moonPhaseTimer = 0;
+const MOON_PHASE_INTERVAL = 600; // frames between phase changes (~10 seconds at 60fps)
+
+function drawMoon() {
+    const mx = 780, my = 70, r = 30;
+
+    // Advance phase over time
+    moonPhaseTimer++;
+    if (moonPhaseTimer >= MOON_PHASE_INTERVAL) {
+        moonPhaseTimer = 0;
+        moonPhase = (moonPhase + 1) % 8;
+    }
+
+    ctx.save();
+
+    // Glow behind the moon (stronger when fuller)
+    const fullness = 1 - Math.abs(moonPhase - 4) / 4; // 0 at new, 1 at full
+    const glowRadius = 40 + fullness * 25;
+    const glowAlpha = 0.05 + fullness * 0.15;
+    const glow = ctx.createRadialGradient(mx, my, r * 0.5, mx, my, glowRadius);
+    glow.addColorStop(0, `rgba(200, 210, 255, ${glowAlpha})`);
+    glow.addColorStop(1, 'rgba(200, 210, 255, 0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(mx, my, glowRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Clip to moon circle
+    ctx.beginPath();
+    ctx.arc(mx, my, r, 0, Math.PI * 2);
+    ctx.clip();
+
+    // Draw the lit part of the moon (pale white/yellow)
+    ctx.fillStyle = '#e8e0d0';
+    ctx.fillRect(mx - r, my - r, r * 2, r * 2);
+
+    // Draw craters on lit surface
+    ctx.fillStyle = 'rgba(180, 170, 155, 0.4)';
+    ctx.beginPath(); ctx.arc(mx - 8, my - 10, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(mx + 10, my + 5, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(mx - 3, my + 12, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(mx + 12, my - 8, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(mx - 12, my + 4, 3.5, 0, Math.PI * 2); ctx.fill();
+
+    // Shadow overlay to create the phase
+    // Phase 0: new (fully dark), Phase 4: full (no shadow)
+    const bg = missions[currentMission].bg;
+    const shadowColor = getThemeColors(bg).sky1;
+
+    if (moonPhase !== 4) { // not full moon
+        ctx.fillStyle = shadowColor;
+
+        if (moonPhase === 0) {
+            // New moon: fully dark
+            ctx.beginPath();
+            ctx.arc(mx, my, r + 1, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            // For other phases, use an ellipse to carve out the shadow
+            // The terminator (shadow edge) is an ellipse whose x-radius varies
+            // phase 1-3: shadow on left side shrinking (waxing)
+            // phase 5-7: shadow on right side growing (waning)
+
+            const t = moonPhase <= 4 ? moonPhase : 8 - moonPhase; // 0-4 symmetric
+            const terminatorRx = r * Math.abs(1 - t / 2); // ellipse x-radius
+
+            if (moonPhase < 4) {
+                // Waxing: shadow on the left
+                // Draw shadow as left half, then add/subtract terminator ellipse
+                ctx.beginPath();
+                ctx.arc(mx, my, r + 1, Math.PI * 0.5, Math.PI * 1.5); // left half arc
+                if (moonPhase < 2) {
+                    // Shadow covers more than half — terminator bulges right
+                    ctx.ellipse(mx, my, terminatorRx, r, 0, -Math.PI * 0.5, Math.PI * 0.5);
+                } else if (moonPhase === 2) {
+                    // First quarter — exactly half
+                    ctx.lineTo(mx, my - r);
+                } else {
+                    // Waxing gibbous — terminator indents left
+                    ctx.ellipse(mx, my, terminatorRx, r, 0, Math.PI * 0.5, -Math.PI * 0.5, true);
+                }
+                ctx.fill();
+            } else {
+                // Waning: shadow on the right
+                ctx.beginPath();
+                ctx.arc(mx, my, r + 1, -Math.PI * 0.5, Math.PI * 0.5); // right half arc
+                if (moonPhase > 6) {
+                    // Shadow covers more than half — terminator bulges left
+                    ctx.ellipse(mx, my, terminatorRx, r, 0, Math.PI * 0.5, -Math.PI * 0.5);
+                } else if (moonPhase === 6) {
+                    // Last quarter — exactly half
+                    ctx.lineTo(mx, my - r);
+                } else {
+                    // Waning gibbous — terminator indents right
+                    ctx.ellipse(mx, my, terminatorRx, r, 0, -Math.PI * 0.5, Math.PI * 0.5, true);
+                }
+                ctx.fill();
+            }
+        }
+    }
+
+    ctx.restore();
+}
+
 // ---- Drawing Functions ----
 
 function getThemeColors(bg) {
@@ -111,6 +217,9 @@ function drawBackground() {
     grad.addColorStop(1, theme.sky2);
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 900, GROUND_Y);
+
+    // Moon
+    drawMoon();
 
     // Stars / particles
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
